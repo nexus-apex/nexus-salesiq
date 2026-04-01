@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Conversation | NexusSalesIQ{% endblock %}
+{% block page_title %}{% if editing %}Edit Conversation{% else %}New Conversation{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Visitor Name</label>
+        <input type="text" name="visitor_name" value="{{ record.visitor_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Agent</label>
+        <input type="text" name="agent" value="{{ record.agent|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Channel</label>
+        <select name="channel">
+          <option value="website" {% if record.channel == 'website' %}selected{% endif %}>Website</option>
+          <option value="whatsapp" {% if record.channel == 'whatsapp' %}selected{% endif %}>WhatsApp</option>
+          <option value="facebook" {% if record.channel == 'facebook' %}selected{% endif %}>Facebook</option>
+          <option value="email" {% if record.channel == 'email' %}selected{% endif %}>Email</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="open" {% if record.status == 'open' %}selected{% endif %}>Open</option>
+          <option value="active" {% if record.status == 'active' %}selected{% endif %}>Active</option>
+          <option value="waiting" {% if record.status == 'waiting' %}selected{% endif %}>Waiting</option>
+          <option value="closed" {% if record.status == 'closed' %}selected{% endif %}>Closed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Messages</label>
+        <input type="number" name="messages" value="{{ record.messages|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Started At</label>
+        <input type="date" name="started_at" value="{{ record.started_at|date:'Y-m-d'|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Rating</label>
+        <input type="number" name="rating" value="{{ record.rating|default:'0' }}">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Conversation</button>
+      <a href="/conversations/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
