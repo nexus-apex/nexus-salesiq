@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Visitors | NexusSalesIQ{% endblock %}
+{% block page_title %}Visitors{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search visitors...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Status</option>
+      <option value="online" {% if status_filter == 'online' %}selected{% endif %}>Online</option>
+      <option value="offline" {% if status_filter == 'offline' %}selected{% endif %}>Offline</option>
+      <option value="away" {% if status_filter == 'away' %}selected{% endif %}>Away</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/visitors/create/" class="btn btn-primary">+ New Visitor</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Page Url</th><th>Country</th><th>Browser</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/visitors/{{ r.pk }}/edit/"><strong>{{ r.name }}</strong></a></td>
+        <td style="color:var(--muted)">{{ r.email|default:"-" }}</td>
+        <td>{{ r.page_url|default:"-" }}</td>
+        <td>{{ r.country|default:"-" }}</td>
+        <td>{{ r.browser|default:"-" }}</td>
+        <td class="actions">
+          <a href="/visitors/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/visitors/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No visitors found.</p>
+    <a href="/visitors/create/" class="btn btn-primary" style="margin-top:1rem">Create Visitor</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
