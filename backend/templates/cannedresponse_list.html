@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Cannedresponses | NexusSalesIQ{% endblock %}
+{% block page_title %}Cannedresponses{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search cannedresponses...">
+
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/cannedresponses/create/" class="btn btn-primary">+ New CannedResponse</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Category</th><th>Shortcut</th><th>Usage Count</th><th>Active</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/cannedresponses/{{ r.pk }}/edit/"><strong>{{ r.title }}</strong></a></td>
+        <td>{{ r.category|default:"-" }}</td>
+        <td>{{ r.shortcut|default:"-" }}</td>
+        <td>{{ r.usage_count|default:"-" }}</td>
+        <td><span class="badge {{ r.active|yesno:\"badge-green,badge-red\" }}">{{ r.active|yesno:\"Yes,No\" }}</span></td>
+        <td class="actions">
+          <a href="/cannedresponses/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/cannedresponses/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No cannedresponses found.</p>
+    <a href="/cannedresponses/create/" class="btn btn-primary" style="margin-top:1rem">Create CannedResponse</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
