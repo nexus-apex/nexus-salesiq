@@ -24,7 +24,7 @@
         <td>{{ r.category|default:"-" }}</td>
         <td>{{ r.shortcut|default:"-" }}</td>
         <td>{{ r.usage_count|default:"-" }}</td>
-        <td><span class="badge {{ r.active|yesno:\"badge-green,badge-red\" }}">{{ r.active|yesno:\"Yes,No\" }}</span></td>
+        <td><span class="badge {{ r.active|yesno:"badge-green,badge-red" }}">{{ r.active|yesno:"Yes,No" }}</span></td>
         <td class="actions">
           <a href="/cannedresponses/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
           <form method="post" action="/cannedresponses/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
